@@ -97,6 +97,9 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.22);
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .photo-card img {
@@ -624,6 +627,10 @@
       .photo-row.right {
         animation-duration: 90s;
       }
+
+      .background-inner {
+        transform: translate(-50%, -50%) rotate(-1deg) scale(1.02);
+      }
       .warning-note {
         animation-duration: 3s;
       }
@@ -708,27 +715,41 @@
   </main>
 
   <script>
-    const imagePool = [
-      "https://picsum.photos/id/1011/900/650",
-      "https://picsum.photos/id/1015/900/650",
-      "https://picsum.photos/id/1016/900/650",
-      "https://picsum.photos/id/1021/900/650",
-      "https://picsum.photos/id/1033/900/650",
-      "https://picsum.photos/id/1035/900/650",
-      "https://picsum.photos/id/1037/900/650",
-      "https://picsum.photos/id/1040/900/650",
-      "https://picsum.photos/id/1041/900/650",
-      "https://picsum.photos/id/1043/900/650",
-      "https://picsum.photos/id/1050/900/650",
-      "https://picsum.photos/id/1057/900/650",
-      "https://picsum.photos/id/1060/900/650",
-      "https://picsum.photos/id/1067/900/650",
-      "https://picsum.photos/id/1074/900/650",
-      "https://picsum.photos/id/1080/900/650",
-      "https://picsum.photos/id/1081/900/650",
-      "https://picsum.photos/id/1082/900/650"
+    /*
+      BACKGROUND GRID RINGAN UNTUK MOBILE / IPHONE
+      Alasan: iPhone/Safari bisa reload sendiri kalau terlalu banyak gambar besar dimuat sekaligus.
+      Jadi jumlah foto dan resolusi gambar dibuat otomatis lebih ringan saat dibuka dari HP.
+    */
+
+    const isSmallScreen = window.matchMedia("(max-width: 640px)").matches;
+
+    const desktopImagePool = [
+      "https://picsum.photos/id/1011/700/500",
+      "https://picsum.photos/id/1015/700/500",
+      "https://picsum.photos/id/1016/700/500",
+      "https://picsum.photos/id/1021/700/500",
+      "https://picsum.photos/id/1033/700/500",
+      "https://picsum.photos/id/1035/700/500",
+      "https://picsum.photos/id/1037/700/500",
+      "https://picsum.photos/id/1040/700/500",
+      "https://picsum.photos/id/1041/700/500",
+      "https://picsum.photos/id/1043/700/500",
+      "https://picsum.photos/id/1050/700/500",
+      "https://picsum.photos/id/1057/700/500"
     ];
 
+    const mobileImagePool = [
+      "https://picsum.photos/id/1011/420/300",
+      "https://picsum.photos/id/1015/420/300",
+      "https://picsum.photos/id/1016/420/300",
+      "https://picsum.photos/id/1021/420/300",
+      "https://picsum.photos/id/1033/420/300",
+      "https://picsum.photos/id/1035/420/300",
+      "https://picsum.photos/id/1040/420/300",
+      "https://picsum.photos/id/1050/420/300"
+    ];
+
+    const imagePool = isSmallScreen ? mobileImagePool : desktopImagePool;
     const backgroundInner = document.getElementById("backgroundInner");
 
     function shuffleArray(arr) {
@@ -738,15 +759,8 @@
     function createPhotoCard(src) {
       const card = document.createElement("div");
       card.className = "photo-card";
-
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "Dummy gallery photo";
-      img.decoding = "async";
-      img.loading = "eager";
-      img.referrerPolicy = "no-referrer";
-
-      card.appendChild(img);
+      card.style.backgroundImage = `url('${src}')`;
+      card.setAttribute("aria-hidden", "true");
       return card;
     }
 
@@ -754,11 +768,14 @@
       const row = document.createElement("div");
       row.className = `photo-row ${direction}`;
 
-      const setA = shuffleArray(imagePool);
-      const setB = shuffleArray(imagePool);
-      const setC = shuffleArray(imagePool.slice(0, 10));
+      const repeatCount = isSmallScreen ? 2 : 3;
+      const photos = [];
 
-      [...setA, ...setB, ...setC].forEach((src) => {
+      for (let i = 0; i < repeatCount; i++) {
+        photos.push(...shuffleArray(imagePool));
+      }
+
+      photos.forEach((src) => {
         row.appendChild(createPhotoCard(src));
       });
 
@@ -769,7 +786,9 @@
       if (!backgroundInner) return;
       backgroundInner.innerHTML = "";
 
-      const rowDirections = ["left", "right", "left", "right", "left", "right", "left"];
+      const rowDirections = isSmallScreen
+        ? ["left", "right", "left", "right"]
+        : ["left", "right", "left", "right", "left", "right"];
 
       rowDirections.forEach((direction) => {
         backgroundInner.appendChild(createRow(direction));
