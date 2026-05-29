@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>SAGAR INNOVATION</title>
+  <!-- FIXED: Clean portal.html, CSS fragment removed -->
   <!-- Background fade fixed: 3 foto berganti dengan keyframes berbeda -->
   <!-- Versi ringan: blur, shadow, dan animasi dikurangi agar lebih cepat di HP -->
   <style>
@@ -36,11 +37,7 @@
       position: relative;
       background: #101813;
     }
-      to {
-        transform: translateX(-45%) rotate(-6deg);
-      }
-    }
-    /* Background foto dummy 3 slide: fade jelas, ringan, dan bernuansa hitam */
+/* Background foto dummy 3 slide: fade jelas, ringan, dan bernuansa hitam */
     .bg-fade-wall {
       position: fixed;
       inset: 0;
@@ -493,6 +490,34 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    .main-web-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 18px;
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 8px 18px rgba(0,0,0,.06);
+      transition: .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .main-web-link:hover {
+        transform: translateY(-1px);
+      }
+    }
+
     .footer-note {
       margin-top: 20px;
       color: rgba(255,255,255,.74);
@@ -658,6 +683,12 @@
         rel="noopener noreferrer"
       >
         Hubungi WhatsApp
+      </a>
+      <a
+        class="main-web-link"
+        href="https://jacksaragih18.github.io/sagar-portal/"
+      >
+        Kembali ke Website Utama
       </a>
     </div>
 
